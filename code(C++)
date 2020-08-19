@@ -14,12 +14,12 @@ class golfer
   public:
   golfer()
   {
-  id=0;
-  strcpy(name,"NA");
-  strcpy(phone,"NA");
-  strcpy(password,"NA");
-  strcpy(cname,"NA");
-  ranking=handicap=age=0;
+    id=0;
+    strcpy(name,"NA");
+    strcpy(phone,"NA");
+    strcpy(password,"NA");
+    strcpy(cname,"NA");
+    ranking=handicap=age=0;
   }
   void getinfo(int);
   void dispinfo();
