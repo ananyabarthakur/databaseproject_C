@@ -1,0 +1,780 @@
+#include<fstream.h>
+#include<conio.h>
+#include<stdio.h>
+#include<string.h>
+
+class golfer
+{
+  int id;
+  char name[100];
+  char phone[100];
+  char password[100],cname[100];
+  int ranking,age;
+  int handicap;
+  public:
+  golfer()
+  {
+  id=0;
+  strcpy(name,"NA");
+  strcpy(phone,"NA");
+  strcpy(password,"NA");
+  strcpy(cname,"NA");
+  ranking=handicap=age=0;
+  }
+  void getinfo(int);
+  void dispinfo();
+  void change();
+  int retid()
+  {
+    return id;
+  }
+  char *retname()
+  {
+    return name;
+  }
+  int retage()
+  {
+    return age;
+  }
+  void setage(int a)
+  {
+    age=a;
+  }
+  int retranking()
+  {
+    return ranking;
+  }
+  void setranking(int a)
+  {
+    ranking=a;
+  }
+  char *retcname()
+  {
+    return cname;
+  }
+  int rethandicap()
+  {
+    return handicap;
+  }
+  void sethandicap(int a)
+  {
+    handicap=a;
+  }
+  void setclubname(char n[])
+  {
+    strcpy(cname,n);
+  }
+  void setname(char n[])
+  {
+    strcpy(name,n);
+  }
+  void setphone(char ph[])
+  {
+    strcpy(phone,ph);
+  }
+
+};
+
+void golfer::getinfo(int x)
+{
+  id=x;
+  cout<<"Enter golfer name ";
+  cin>>name;
+  cout<<"Enter Phone No. ";
+  cin>>phone;
+  cout<<"Enter Age ";
+  cin>>age;
+  cout<<"\n Enter ClubName ";
+  cin>>cname;
+  cout<<"\n\n\n\t Hi "<<name<<" registered as Golfer Id "<<id<<endl;
+}
+void golfer::dispinfo()
+{
+  cout<<"\n\n"<<"ID: "<<id<<" "<<"NAME: "<<name<<" "<<"PHONE: "<<phone<<" "<<"AGE:
+  "<<age<<" "<<"RANK: "<<ranking<<" "<<"HANDICAP: "<<handicap<<" "<<"CLUB: "<<cname<<endl;
+}
+
+void golfer::change()
+
+{
+  int opt;
+  do
+  {
+    cout<<"1. Name Change "<<endl;
+    cout<<"2. Password change "<<endl;
+    cout<<"3. Age change "<<endl;
+    cout<<"4. Phone No change "<<endl;
+    cout<<"5. Ranking change "<<endl;
+    cout<<"6. Handicap change "<<endl;
+    cout<<"7. Clubname change "<<endl;
+    cout<<"8. Quit "<<endl;
+    cout<<"\n Enter Option ";
+    cin>>opt;
+    switch(opt)
+    {
+      case 1:
+        cout<<"\n Enter New Name ";
+        cin>>name;
+        break;
+      case 2:
+        cout<<"\n Enter New Password ";
+        cin>>password;
+        break;
+      case 3:
+        cout<<"\n Enter New Age ";
+        cin>>age;
+        break;
+      case 4:
+        cout<<"\n Enter New PhoneNo ";
+        cin>>phone;
+        break;
+      case 5:
+        cout<<"\n Enter New Ranking ";
+        cin>>ranking;
+        break;
+      case 6:
+        cout<<"\n Enter New handicap ";
+        cin>>handicap;
+        break;
+      case 7:
+        cout<<"\n Enter New ClubName ";
+        cin>>cname;
+        break;
+      }
+    }while(opt!=8);
+}
+
+int lastid()
+{
+  fstream f1("golfer.dat",ios::in|ios::binary);
+  golfer p1;
+  int x=0;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    x=p1.retid();
+  }
+  return x+1;
+}
+
+void addgolfer()
+{
+  fstream f1("golfer.dat",ios::app|ios::binary);
+  golfer p1;
+  p1.getinfo(lastid());
+  f1.write((char *)&p1,sizeof(p1));
+  f1.close();
+}
+void readgolfer()
+{
+  fstream f1("golfer.dat",ios::in|ios::binary);
+  golfer p1;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    p1.dispinfo();
+  }
+  f1.close();
+}
+void search_golferid()
+{
+  fstream f1("golfer.dat",ios::in|ios::binary);
+  golfer p1;
+  int id;
+  cout<<" Enter GolferId ";
+  cin>>id;
+  int x=0;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    if(p1.retid()==id)
+    {
+      x=1;
+      p1.dispinfo();
+    }
+  }
+  if(x==0)
+    cout<<" Not Present ";
+  f1.close();
+}
+
+void search_name()
+{
+  fstream f1("golfer.dat",ios::in|ios::binary);
+  golfer p1;
+  char name[100];
+  cout<<" Enter Golfer Name ";
+  cin>>name;
+  int x=0;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    if(strcmpi(p1.retname(),name)==0)
+    {
+      x=1;
+      p1.dispinfo();
+    }
+  }
+  if(x==0)
+    cout<<" Not Present ";
+  f1.close();
+}
+
+void search_handicap()
+{
+  fstream f1("golfer.dat",ios::in|ios::binary);
+  golfer p1;
+  int p;
+  cout<<" Enter Golfer Handicap ";
+  cin>>p;
+  int x=0;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    if(p1.rethandicap()==p)
+    {
+      x=1;
+      p1.dispinfo();
+    }
+  }
+  if(x==0)
+    cout<<" Not Present ";
+  f1.close();
+}
+
+void search_ranking()
+{
+  fstream f1("golfer.dat",ios::in|ios::binary);
+  golfer p1;
+  int id,y;
+  cout<<" Enter Ranking ";
+  cin>>y;
+  int x=0;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    if(p1.retranking()>=y)
+    {
+      x=1;
+      p1.dispinfo();
+    }
+  }
+  if(x==0)
+    cout<<" Not Present ";
+  f1.close();
+}
+
+void modifygolfer()
+{
+  fstream f1("golfer.dat",ios::in|ios::out|ios::binary);
+  golfer p1;
+  int id;
+  cout<<"\n Enter golferId ";
+  cin>>id;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    if(p1.retid()==id)
+    {
+      p1.change();
+      f1.seekp(f1.tellp()-sizeof(p1));
+      f1.write((char*)&p1,sizeof(p1));
+    }
+  }
+}
+// end of golfer
+
+
+class club
+{
+  int clubid;
+  char clubname[100];
+  char location[100];
+  char pass[100];
+  char email[50],rating[100];
+  int member;
+  public:
+  club()
+  {
+    clubid=0;
+    strcpy(clubname,"null");
+    strcpy(location,"null");
+    strcpy(pass,"null");
+    strcpy(email,"null");
+    strcpy(rating,"null");
+    member=0;
+  }
+  void getinfo(int);
+  void dispinfo();
+  int retclubid()
+  {
+    return clubid;
+  }
+  char *retclubname()
+  {
+    return clubname;
+  }
+  void setclubname(char cname[])
+  {
+    strcpy(clubname,cname);
+  }
+  char *retpass()
+  {
+    return pass;
+  }
+  void setpass(char pa[])
+  {
+    strcpy(pass,pa);
+  }
+  char *retlocation()
+  {
+    return location;
+  }
+  void setlocation(char loc[])
+  {
+    strcpy(location,loc);
+  }
+  char *retemail()
+  {
+    return email;
+  }
+  void setemail(char em[])
+  {
+    strcpy(email,em);
+  }
+  char *retrating()
+  {
+    return rating;
+  }
+  void setrating(char ra[])
+  {
+    strcpy(rating,ra);
+  }
+  int retmember()
+  {
+    return member;
+  }
+  void setmember()
+  {
+    member++;
+  }
+  void change();
+};
+
+void club::getinfo(int x)
+{
+  clubid=x;
+  cout<<" Enter Club Name";
+  cin>>clubname;
+  cout<<" Enter Location ";
+  cin>>location;
+  cout<<" Create Password ";
+  cin>>pass;
+  cout<<"Enter emailId ";
+  cin>>email;
+  cout<<"Enter rating(4*/3*/*/*) ";
+  cin>>rating;
+  cout<<"\n Enter No. of Member&#39;s ";
+  cin>>member;
+  cout<<"\n\n\n\t\t "<<clubname<<" you registered as clubid "<<clubid<<endl;
+}
+
+void club::dispinfo()
+{
+  cout<<"\n\n"<<"ID: "<<clubid<<" "<<"CLUB NAME: "<<clubname<<" "<<"LOCATION:
+  "<<location<<" "<<"RATING: "<<rating<<" "<<"EMAIL: "<<email<<" "<<"MEMBERS:
+  "<<member<<endl;
+}
+
+void club::change()
+{
+  int opt;
+  cout<<"1.ClubName \n2.Password\n3.Location\n4.rating\n5.emailId ";
+  cout<<"\n Enter option ";
+  cin>>opt;
+  if(opt==1)
+  {
+    cout<<" \nExisting clubname "<<clubname<<", Enter new Club Name ";
+    cin>>clubname;
+  }
+  else if(opt==2)
+  {
+    cout<<" \nExisting Password "<<pass<<", Enter new Password ";
+    cin>>pass;
+  }
+  else if(opt==3)
+  {
+    cout<<" \nExisting Location "<<location<<", Enter new Location ";
+    cin>>location;
+  }
+  else if(opt==4)
+  {
+    cout<<" \nExisting rating "<<rating<<", Enter new rating ";
+    cin>>rating;
+  }
+  else if(opt==5)
+  {
+    cout<<" \nExisting EmailId "<<email<<", Enter new Email ";
+    cin>>email;
+  }
+}
+
+int lastclubid()
+{
+  fstream f1("club.dat",ios::in|ios::binary);
+  club p1;
+  int x=0;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    x=p1.retclubid();
+  }
+  return x+1;
+}
+
+void addclub()
+{
+  fstream f1("club.dat",ios::app|ios::binary);
+  club e1;
+  e1.getinfo(lastclubid());
+  f1.write((char *)&e1,sizeof(e1));
+  f1.close();
+}
+    
+void readclub()
+{
+  fstream f1("club.dat",ios::in|ios::binary);
+  club e1;
+  while(f1.read((char *)&e1,sizeof(e1)))
+  {
+    e1.dispinfo();
+  }
+  f1.close();
+  getch();
+}
+
+
+void search_clubid()
+{
+  fstream f1("club.dat",ios::in|ios::binary);
+  club e1;
+  int eid;
+  cout<<" Enter ClubId ";
+  cin>>eid;
+  int x=0;
+  while(f1.read((char *)&e1,sizeof(e1)))
+  {
+    if(e1.retclubid()==eid)
+    {
+      x=1;
+      e1.dispinfo();
+    }
+  }
+  if(x==0)
+    cout<<" Not Present ";
+  f1.close();
+}
+
+
+void search_clubname()
+{
+  fstream f1("club.dat",ios::in|ios::binary);
+  club e1;
+  char name[100];
+  cout<<" Enter ClubName ";
+  cin>>name;
+  int x=0;
+  while(f1.read((char *)&e1,sizeof(e1)))
+  {
+    if(strcmpi(e1.retclubname(),name)==0)
+    {
+      x=1;
+      e1.dispinfo();
+    }
+  }
+  if(x==0)
+    cout<<" Not Present ";
+  f1.close();
+}
+
+void searchlocation()
+{
+  fstream f1("club.dat",ios::in|ios::binary);
+  club e1;
+  char loc[100];
+
+  cout<<" Enter Location ";
+  cin>>loc;
+  int x=0;
+  while(f1.read((char *)&e1,sizeof(e1)))
+  {
+    if(strcmpi(e1.retlocation(),loc)==0)
+    {
+      x=1;
+      e1.dispinfo();
+    }
+  }
+  if(x==0)
+    cout<<" Not Present ";
+  f1.close();
+}
+
+
+void searchrating()
+{
+  fstream f1("club.dat",ios::in|ios::binary);
+  club e1;
+  char rat[100];
+  cout<<" Enter rating ";
+  cin>>rat;
+  int x=0;
+  while(f1.read((char *)&e1,sizeof(e1)))
+  {
+    if(strcmpi(e1.retrating(),rat)==0)
+    {
+      x=1;
+      e1.dispinfo();
+    }
+  }
+  if(x==0)
+    cout<<" Not Present ";
+  f1.close();
+}
+
+
+void modifyclub()
+{
+  fstream f1("club.dat",ios::in|ios::out|ios::binary);
+  club p1;
+  int id;
+  cout<<"\n Enter ClubId ";
+  cin>>id;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    if(p1.retclubid()==id)
+    {
+      p1.change();
+      f1.seekp(f1.tellp()-sizeof(p1));
+      f1.write((char*)&p1,sizeof(p1));
+    }
+  }
+}
+
+
+void searchgolfer()
+{
+  int opt;
+  do
+  {
+    clrscr();
+    cout<<"\n1.on Gid "<<endl;
+    cout<<"\n2.on GolferName "<<endl;
+    cout<<"\n3.on Handicap "<<endl;
+    cout<<"\n4.on Ranking "<<endl;
+    cout<<"\n5.Exit "<<endl;
+    cout<<"\n Enter option ";
+    cin>>opt;
+    switch(opt)
+    {
+      case 1:
+        search_golferid();
+        break;
+      case 2:
+        search_name();
+        break;
+      case 3:
+        search_handicap();
+        break;
+      case 4:
+        search_ranking();
+        break;
+    }
+    cout<<"\n\n\n\t press any key to continue....";
+    getch();
+  }while(opt!=5);
+}
+
+void clubdetail()
+{
+  int opt;
+  do
+  {
+    clrscr();
+    cout<<"\n1.club Display "<<endl;
+    cout<<"\n2.search clubID "<<endl;
+    cout<<"\n3.search clubName "<<endl;
+    cout<<"\n4.search golfer "<<endl;
+    cout<<"\n5.Quit "<<endl;
+    cout<<"\n Enter option ";
+    cin>>opt;
+    switch(opt)
+    {
+      case 1:
+        readclub();
+        break;
+      case 2:
+        search_clubid();
+        break;
+      case 3:
+        search_clubname();
+        break;
+      case 4:
+        searchgolfer();
+        break;
+    }
+    cout<<"\n\n\n\t press any key to continue....";
+    getch();
+  }while(opt!=5);
+}
+
+void golferdetail()
+{
+  int opt;
+  do
+  {
+    clrscr();
+    cout<<"\n1.Display Clubs "<<endl;
+    cout<<"\n2.search clubID "<<endl;
+    cout<<"\n3.search clubName "<<endl;
+    cout<<"\n4.search Club Location "<<endl;
+    cout<<"\n5.search Club ratings "<<endl;
+    cout<<"\n6.search Golfer ";
+    cout<<"\n7.Modify Gulfer "<<endl;
+    cout<<"\n8.Logout "<<endl;
+    cout<<"\n Enter option ";
+    cin>>opt;
+    switch(opt)
+    {
+      case 1:
+        readclub();
+        break;
+
+      case 3:
+        search_clubid();
+        break;
+      case 4:
+        search_clubname();
+        break;
+      case 5:
+        searchrating();
+        break;
+      case 6:
+        searchgolfer();
+        break;
+      case 7:
+        modifygolfer();
+        break;
+    }
+    cout<<"\n\n\n\t press any key to continue....";
+    getch();
+  }while(opt!=8);
+}
+
+
+void login()
+{
+  fstream f1("golfer.dat",ios::in|ios::binary);
+  golfer p1;
+  char pname[100];
+  int pid;
+  cout<<"\n Enter Pid ";
+  cin>>pid;
+  cout<<" Enter GolferName ";
+  cin>>pname;
+  int x=0;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    if(strcmpi(p1.retname(),pname)==0 && p1.retid()==pid)
+    {
+      x=1;
+      clrscr();
+      cout<<"\n\t\t\t Golfer Details "<<endl;
+      p1.dispinfo();
+      cout<<"\n\n\t Press any key ";
+      getch();
+      golferdetail();
+    }
+  }
+  if(x==0)
+    cout<<" Invalid Login ";
+  f1.close();
+}
+
+void loginclub()
+{
+  fstream f1("club.dat",ios::in|ios::binary);
+  club p1;
+  char pass[100];
+  int cid;
+  cout<<"\n Enter ClubId ";
+  cin>>cid;
+  cout<<" Enter Password ";
+  cin>>pass;
+  int x=0;
+  while(f1.read((char *)&p1,sizeof(p1)))
+  {
+    if(strcmpi(p1.retpass(),pass)==0 && p1.retclubid()==cid)
+    {
+      x=1;
+      clrscr();
+      cout<<"\n\t\t\t Club Details "<<endl;
+      p1.dispinfo();
+      cout<<"\n\n\t Press any key ";
+      getch();
+      clubdetail();
+    }
+  }
+  if(x==0)
+    cout<<" Invalid Login ";
+  f1.close();
+}
+
+
+void main()
+{
+  int opt;
+  do
+  {
+    clrscr();
+    cout<<"\n***************** Main Menu*****************\n";
+    cout<<"\n\t\t1.Clubs "<<endl;
+    cout<<"\n\n\t\t2.Golfers "<<endl;
+    cout<<"\n\n\t\t Enter option ";
+    cin>>opt;
+    switch(opt)
+    {
+      case 1:
+        clrscr() ;
+        int x;
+        cout<<"\n\n\n\t\t 1.New Club Registration ";
+        cout<<"\n\t\t 2.Registered Club ";
+        cout<<"\n\t\t Enter option ";
+        cin>>x;
+        if(x==1)
+        {
+          clrscr() ;
+          addclub();
+        }
+        else if(x==2)
+        {
+          clrscr();
+          loginclub();
+        }
+        break;
+    case 2:
+      clrscr();
+      cout<<"\n\n\n\t\t 1.New Golfer Registration ";
+      cout<<"\n\t\t 2.Registered Golfer ";
+      cout<<"\n\t\t Enter option ";
+      cin>>x;
+      if(x==1)
+      {
+        clrscr() ;
+        addgolfer();
+      }
+      else if(x==2)
+      {
+        clrscr();
+        login();
+      }
+      break;
+    default:
+      if(opt!=3)
+        cout<<" Invalid ";
+    }
+    cout<<"\n\n\n\t press any key to continue....";
+    getch();
+  }while(opt!=3);
+}
